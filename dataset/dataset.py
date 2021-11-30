@@ -12,7 +12,6 @@ def split_data(data_dir: str, env: constant.Env) -> pd.DataFrame:
     """
     划分数据集
     """
-
     data = pd.read_csv(data_dir)
 
     mm = MinMaxScaler()
