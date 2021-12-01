@@ -28,6 +28,8 @@ def split_data(data_dir: str, env: constant.Env) -> pd.DataFrame:
     valid_data_y = valid_data.iloc[:, 12:13]
     valid_data_x = mm.transform(valid_data_x)
     valid_data_x = pd.DataFrame(valid_data_x)
+    valid_data_y = valid_data_y.reset_index()
+    valid_data_y = valid_data_y.drop(columns=['index'])
     valid_data_x.loc[:,"y"] =valid_data_y
     test_data = data.iloc[train_num + valid_num:, :]
     if env.TRAIN == env:
