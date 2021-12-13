@@ -28,7 +28,7 @@ if __name__ == '__main__':
     epsilon = constant.EPSILON
     max_acc = constant.MAX_ACC
     data_path = constant.DATA_PATH
-    model = model.LstmWeather()
+    model = model.LstmWeather(12, 3, 2)
     train = dataset.split_data(data_path, env=constant.Env.TRAIN)
     valid = dataset.split_data(data_path, env=constant.Env.VALID)
     train_loader, valid_loader, test_loader = dataset.get_data_loader(data_path)
@@ -36,11 +36,12 @@ if __name__ == '__main__':
     # train_loader, valid_loader, test_loader = dataset.get_data_loader(r"D:\project\zwl\sp500\data")
     train_loss = []
     valid_loss = []
+
     criterion = nn.CrossEntropyLoss()
     # 计算损失函数（均方误差)
     cost = nn.MSELoss(reduction='mean')
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
-    model.cuda()
+    # model.cuda()
 
     # print("模型现在位于:{}".format(model.device))
     for epoch in range(epochs):
@@ -49,33 +50,34 @@ if __name__ == '__main__':
         loss = 0.0
         for i, data in enumerate(train_loader):
             images, labels = data
-            images, labels = images.cuda(), labels.cuda()
+            # images, labels = images.cuda(), labels.cuda()
             # print("imgaes现在位于:{},labels现在位于:{}".format(images.device, labels.device))
             optimizer.zero_grad()
             outputs = model(images)
+            # print(outputs)
             loss = cost(outputs + epsilon, labels)
             loss.backward()
             optimizer.step()
         print('Finish {} epoch\nLoss: {:.6f},'.format(epoch + 1, loss))
         train_loss.append(loss)
-
+        if loss < 40:
+            torch.save(model.state_dict(), '.\\trained_model\\best_model_basic_CBAM_31_mat.pth')
         # 验证
         model.eval()
         eval_loss = 0.0
         for data in valid_loader:
             images, labels = data
-            images, labels = images.cuda(), labels.cuda()
+            # images, labels = images.cuda(), labels.cuda()
             outputs = model(images)
-            loss = cost(outputs, labels)
-            eval_loss = eval_loss + loss.item()
-        print('Valid Loss: {:.6f}'.format(eval_loss * 100 / len(valid)))
+            eval_loss = cost(outputs, labels)
+        print('Valid Loss: {:.6f}'.format(eval_loss))
         valid_loss.append(eval_loss)
         if eval_loss < 100:
             torch.save(model.state_dict(), '.\\trained_model\\best_model_basic_CBAM_31_mat.pth')
-    print(valid_loss)
     train_loss = torch.tensor(train_loss, device='cpu')
     length = len(train_loss)
     loss_x = range(length)
+    # vis.line(X=np.array(x), Y=np.column_stack((np.array(y), np.array(z))), opts=dict(showlegend=True))
     vis.line(
         X=list(loss_x),  # x坐标
         Y=list(train_loss),  # y值

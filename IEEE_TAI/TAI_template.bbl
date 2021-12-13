@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{schultz2021can}
+M.~Schultz, C.~Betancourt, B.~Gong, F.~Kleinert, M.~Langguth, L.~Leufen,
+  A.~Mozaffari, S.~Stadtler, Can deep learning beat numerical weather
+  prediction?, Philosophical Transactions of the Royal Society A 379~(2194)
+  (2021) 20200097.
+
+\bibitem{ahyar2020firefly}
+L.~F. Ahyar, S.~Suyanto, A.~Arifianto, Firefly algorithm-based hyperparameters
+  setting of drnn for weather prediction, in: 2020 International Conference on
+  Data Science and Its Applications (ICoDSA), IEEE, 2020, pp. 1--5.
+
+\bibitem{bai2020summary}
+Y.~Bai, J.~Wang, X.~Wang, H.~Li, The summary of deep learning in the field of
+  weather forecast research, in: Journal of Physics: Conference Series, Vol.
+  1646, IOP Publishing, 2020, p. 012035.
+
+\bibitem{杨函0基于深度学习的气象预测研究}
+杨函, 基于深度学习的气象预测研究, Ph.D. thesis,
+  哈尔滨工业大学.
+
+\end{thebibliography}

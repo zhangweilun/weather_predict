@@ -31,7 +31,15 @@ def split_data(data_dir: str, env: constant.Env) -> pd.DataFrame:
     valid_data_y = valid_data_y.reset_index()
     valid_data_y = valid_data_y.drop(columns=['index'])
     valid_data_x.loc[:,"y"] =valid_data_y
+
+
+    mm_test = MinMaxScaler()
     test_data = data.iloc[train_num + valid_num:, :]
+    test_data_x = train_data.iloc[:, 0:12]
+    test_data_y = train_data.iloc[:, 12:13]
+    test_data_x = mm_test.fit_transform(test_data_x)
+    test_data_x = pd.DataFrame(test_data_x)
+    test_data_x.loc[:, "y"] = test_data_y
     if env.TRAIN == env:
         return train_data_x
     elif env.VALID == env:

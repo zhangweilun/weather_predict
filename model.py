@@ -1,27 +1,25 @@
 import torch.nn as nn
+import torch
 
 
 class LstmWeather(nn.Module):
 
-    def __init__(self):
-
+    def __init__(self, input_size, hidden_dim, num_layers):
         super(LstmWeather, self).__init__()
         # Parameters
-        self.feature_dim = 12
-        self.hidden_dim = 500
-        self.num_layers = 3
         self.output_dim = 128
-        self.lstm = nn.LSTM(self.feature_dim, self.hidden_dim, self.num_layers, dropout=0.1, batch_first=True)
-        self.fc = nn.Linear(self.hidden_dim, self.output_dim)
+        self.lstm = nn.LSTM(input_size, hidden_dim, num_layers, dropout=0.1, batch_first=True)
+        self.fc = nn.Linear(hidden_dim, self.output_dim)
         # self.linear_1 = nn.Linear(12, 128)
-        self.sigmoid_1 = nn.Sigmoid()
         self.linear_2 = nn.Linear(128, 1)
 
     def forward(self, x):
-        x = self.lstm(x)
+        h_t = torch.zeros(2, x.size(0), 3 ,dtype=torch.float32)
+        c_t = torch.zeros(2, x.size(0), 3, dtype=torch.float32)
+        x = self.lstm(x, (h_t, c_t))
         x = x[0][:, -1, :]
         x = self.fc(x)
-        x = self.sigmoid_1(x)
+        # x = self.sigmoid_1(x)
         x = self.linear_2(x)
         return x
 
